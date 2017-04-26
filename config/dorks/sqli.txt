@@ -1,0 +1,6 @@
+.php?id=
+.asp?id=
+.aspx?id=
+.php?type=
+.asp?type=
+.aspx?type=

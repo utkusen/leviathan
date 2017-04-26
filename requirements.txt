@@ -1,0 +1,6 @@
+paramiko
+shodan
+bs4
+lxml
+google-api-python-client
+requests
