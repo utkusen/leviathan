@@ -25,6 +25,7 @@ from lib.sqli_scanner import sqli_scan, sqli_scan_all, link_extract
 from lib.send_command import send_command_ssh, send_to_all_ssh
 from leviathan_config import COUNTRY_CODES, BASE_DIR
 
+
 # Main definition - constants
 menu_actions = {}
 shodan_actions = {}
@@ -1074,4 +1075,8 @@ You could go to jail on obstruction of justice charges just for running leviatha
 even though you are innocent. Your are on notice, that using this tool outside your
 "own" environment is considered malicious and is against the law. Use with caution.
     """
-    main_menu()
+    try:
+        main_menu()
+    except KeyboardInterrupt:
+        print "Killed!"
+        sys.exit()

@@ -35,6 +35,8 @@ def brute_force(discovery_id):
             for ipaddress in iplist:
                 try:
                     brute_force_by_ip(ipaddress, user_fullpath, pass_fullpath, ip_fullpath, protocol, port)
+                except KeyboardInterrupt:
+                    break
                 except:
                     print "Operation Timeout"    
             else:

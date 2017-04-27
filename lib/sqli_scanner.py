@@ -50,6 +50,8 @@ def sqli_scan(discovery_id):
             for url in url_list:
                 try:
                     sqli_scan_by_url(url, output_file)
+                except KeyboardInterrupt:
+                    break
                 except:
                     continue
                   

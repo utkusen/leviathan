@@ -20,29 +20,33 @@ def shodan_search(query, protocol):
         results = api.search(query)
     except:
         print "Cannot communicate with Shodan.io"    
+        return 0
     ip_list = []
     output_file = ''
     i = 0
     l = len(results['matches'])
     for result in results['matches']:
-        # Initial call to print 0% progress
-        printProgressBar(i, l, prefix='Progress:', suffix='Complete', length=50)
-        ip = result['ip_str']
-        if ip in ip_list:
-            continue
-        ip_list.append(ip)
-        output_file = get_output_file_by_scanner('shodan', discovery_id, protocol)
         try:
-            with open(output_file, "a") as ips:
-                ips.write(ip)
-                ips.write("\n")
-        except IOError:
-            print "There is no such file: %s" % output_file
-            return 0
-        i += 1
-        sys.stdout.write(printProgressBar(i, l, prefix='Progress:', suffix='Complete', length=50))
-        sleep(0.1)
-        sys.stdout.flush()    
+            # Initial call to print 0% progress
+            printProgressBar(i, l, prefix='Progress:', suffix='Complete', length=50)
+            ip = result['ip_str']
+            if ip in ip_list:
+                continue
+            ip_list.append(ip)
+            output_file = get_output_file_by_scanner('shodan', discovery_id, protocol)
+            try:
+                with open(output_file, "a") as ips:
+                    ips.write(ip)
+                    ips.write("\n")
+            except IOError:
+                print "There is no such file: %s" % output_file
+                return 0
+            i += 1
+            sys.stdout.write(printProgressBar(i, l, prefix='Progress:', suffix='Complete', length=50))
+            sleep(0.1)
+            sys.stdout.flush()    
+        except KeyboardInterrupt:
+            break
     print "\nResults saved under: %s" % output_file
     print "Finished"
     return 1
@@ -56,43 +60,46 @@ def censys_search(query, protocol):
     output_file = ""
     page = 1
     while page <= pages:
-        print "Extracting IPs from page %s" % str(page)
-        params = {'query': query, 'page': page}
         try:
-            res = requests.post(CENSYS_API_URL + "/search/ipv4", json=params, auth=(CENSYS_UID, CENSYS_SECRET))
-        except:
-            print "Cannot communicate with Censys.io"    
-        payload = res.json()
-        ip_list = []
-
-        i = 0
-        l = len(payload['results'])
-
-        # Initial call to print 0% progress
-        printProgressBar(i, l, prefix='Progress:', suffix='Complete', length=50)
-        for r in payload['results']:
-            ip = r["ip"]
-            if ip in ip_list:
-                continue
-            ip_list.append(ip)
-            output_file = get_output_file_by_scanner('censys', discovery_id, protocol)
+            print "Extracting IPs from page %s" % str(page)
+            params = {'query': query, 'page': page}
             try:
-                with open(output_file, "a") as ips:
-                    ips.write(ip)
-                    ips.write("\n")
-            except IOError:
-                print "There is no such file: %s" % output_file
-                return 0
+                res = requests.post(CENSYS_API_URL + "/search/ipv4", json=params, auth=(CENSYS_UID, CENSYS_SECRET))
+            except:
+                print "Cannot communicate with Censys.io"    
+            payload = res.json()
+            ip_list = []
 
-            # Update Progress Bar
-            i += 1
-            sys.stdout.write(printProgressBar(i, l, prefix='Progress:', suffix='Complete', length=50))
-            sleep(0.1)
-            sys.stdout.flush()
-        print ""
-        if page == 1:
-            pages = payload['metadata']['pages']
-        page += 1
+            i = 0
+            l = len(payload['results'])
+
+            # Initial call to print 0% progress
+            printProgressBar(i, l, prefix='Progress:', suffix='Complete', length=50)
+            for r in payload['results']:
+                ip = r["ip"]
+                if ip in ip_list:
+                    continue
+                ip_list.append(ip)
+                output_file = get_output_file_by_scanner('censys', discovery_id, protocol)
+                try:
+                    with open(output_file, "a") as ips:
+                        ips.write(ip)
+                        ips.write("\n")
+                except IOError:
+                    print "There is no such file: %s" % output_file
+                    return 0
+
+                # Update Progress Bar
+                i += 1
+                sys.stdout.write(printProgressBar(i, l, prefix='Progress:', suffix='Complete', length=50))
+                sleep(0.1)
+                sys.stdout.flush()
+            print ""
+            if page == 1:
+                pages = payload['metadata']['pages']
+            page += 1
+        except KeyboardInterrupt:
+            break
     print "Results saved under: %s" % output_file
     print "Finished"
     return 1
