@@ -4,7 +4,7 @@
 # description     :Leviathan, wide range mass audit toolkit.
 # author          :Ozge Barbaros, Utku Sen
 # date            :May 2017
-# version         :0.1.1
+# version         :0.1.2
 # usage           :python leviathan.py
 # notes           :
 # python_version  :2.7.6
@@ -1062,7 +1062,7 @@ if __name__ == "__main__":
       ▀▓▓▓▓▀        ▀   ▀▌▌▀     └     ▀   ▀▌▀─╙   ▀▌           ╙▀▌▀ └
         █─
 
-[---]       Leviathan, wide range mass audit toolkit. | version: 0.1.1      [---]
+[---]       Leviathan, wide range mass audit toolkit. | version: 0.1.2      [---]
 [---]                                                                       [---]
 [---]               Created by Ozge Barbaros & Utku Sen                     [---]
 [---] ozgebarbaros.com | twitter.com/ozgebarbaros | github.com/ozgebarbaros [---]
