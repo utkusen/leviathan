@@ -1073,7 +1073,7 @@ if __name__ == "__main__":
 
 LEGAL WARNING: While this may be helpful for some, there are significant risks.
 You could go to jail on obstruction of justice charges just for running leviathan,
-even though you are innocent. Your are on notice, that using this tool outside your
+even though you are innocent. You are on notice, that using this tool outside your
 "own" environment is considered malicious and is against the law. Use with caution.
     """
     try:
