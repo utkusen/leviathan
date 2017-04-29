@@ -35,6 +35,7 @@ shodan_protocols = {
     'ssh': 'ssh',
     'ftp': 'ftp',
     'telnet': 'telnet',
+    'smb': 'smb',
     'rdp': 'rdp',
     'mysql': 'mysql',
 }
@@ -192,7 +193,7 @@ def shodan_auto_query():
     print """
     Enter Protocol 
 
-    (Examples:ssh, ftp, telnet, rdp, mysql):
+    (Examples:ssh, ftp, telnet, smb, rdp, mysql):
     """
     protocol = raw_input(">>")
     try:
@@ -336,7 +337,7 @@ def masscan():
     print """
     Enter Protocol 
 
-    (Examples:ssh, ftp, telnet, rdp, mysql):
+    (Examples:ssh, ftp, telnet, smb, rdp, mysql):
     """
     protocol = raw_input(">>")
     res = mass_scan(ip_range, protocol)

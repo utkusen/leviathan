@@ -44,10 +44,10 @@ def id_generator():
 def get_protocol_by_service(protocol, service):
     return {
         'censys': {'ftp': '"21/ftp"', 'ssh': '"22/ssh"', 'telnet': '"23/telnet"'}.get(protocol, False),
-        'massscan': {'ftp': '-p21', 'ssh': '-p22', 'telnet': '-p23', 'rdp': '-p3389',
+        'massscan': {'ftp': '-p21', 'ssh': '-p22', 'telnet': '-p23', 'smb': '-p445' , 'rdp': '-p3389',
                      'mysql': '-p3306'}.get(protocol, False)
     }.get(service,
-          {'ftp': '21', 'ssh': '22', 'telnet': '23', 'rdp': '3389',
+          {'ftp': '21', 'ssh': '22', 'telnet': '23', 'smb': '445' , 'rdp': '3389',
            'mysql': '3306'}.get(protocol, False))
 
 
