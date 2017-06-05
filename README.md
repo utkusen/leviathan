@@ -2,7 +2,7 @@
 <img src="levlogo.png" width="50%"></img>
 </p>
 <p align="center">
-<a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-2.7-yellow.svg"></a> <img src="https://img.shields.io/badge/license-GPLv3-red.svg">
+<a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-2.7-yellow.svg"></a> <img src="https://img.shields.io/badge/license-GPLv3-red.svg"> <a href="https://www.blackhat.com/us-17/arsenal.html#leviathan-framework"><img src="https://img.shields.io/badge/Blackhat%20USA%2017-Arsenal-blue.svg"></a>
 </p>
 
 Leviathan is a mass audit toolkit which has wide range service discovery, brute force, SQL injection detection and running custom exploit capabilities. It consists open source tools such masscan, ncrack, dsss and gives you the flexibility of using them with a combination.
