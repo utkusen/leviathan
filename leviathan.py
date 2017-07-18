@@ -20,7 +20,7 @@ import glob
 from lib.protocol_scanner import shodan_search, censys_search, mass_scan
 from lib.utils import query_constructor, automatic_dork, show_config_file, \
     config_change, get_file_by_dicovery_id, return_asset
-from lib.brute_forcer import brute_force, bruteforce_all
+from lib.brute_forcer import brute_force, bruteforce_all, brute_force_specific
 from lib.sqli_scanner import sqli_scan, sqli_scan_all, link_extract
 from lib.send_command import send_command_ssh, send_to_all_ssh
 from leviathan_config import COUNTRY_CODES, BASE_DIR
@@ -102,28 +102,28 @@ Select from the menu:
 def menu1():
     print """
 
- _______________          |*\_/*|________ 
-|  ___________  |        ||_/-\_|______  | 
-| |           | |        | |           | | 
-| |   0   0   | |        | |   0   0   | | 
-| |     -     | |        | |     -     | | 
-| |   \___/   | |        | |   \___/   | | 
-| |___     ___| |        | |___________| | 
-|_____|\_/|_____|        |_______________| 
+ _______________          |*\_/*|________
+|  ___________  |        ||_/-\_|______  |
+| |           | |        | |           | |
+| |   0   0   | |        | |   0   0   | |
+| |     -     | |        | |     -     | |
+| |   \___/   | |        | |   \___/   | |
+| |___     ___| |        | |___________| |
+|_____|\_/|_____|        |_______________|
  _|__|/ \|_|_.............._|________|_
-/ ********** \            / ********** \ 
-/ ************ \         / ************ \   
-     _ _                                   
-    | (_)                                  
-  __| |_ ___  ___ _____   _____ _ __ _   _ 
+/ ********** \            / ********** \
+/ ************ \         / ************ \
+     _ _
+    | (_)
+  __| |_ ___  ___ _____   _____ _ __ _   _
  / _` | / __|/ __/ _ \ \ / / _ \ '__| | | |
 | (_| | \__ \ (_| (_) \ V /  __/ |  | |_| |
  \__,_|_|___/\___\___/ \_/ \___|_|   \__, |
                                       __/ |
-                                     |___/ 
-                                 
-Discovery module helps you to identify machines which runs a specific service. 
-You can extract pre-discovered machines with Shodan's or Censys's API (option 1-2) 
+                                     |___/
+
+Discovery module helps you to identify machines which runs a specific service.
+You can extract pre-discovered machines with Shodan's or Censys's API (option 1-2)
 or you can scan them yourself with masscan tool.(option 3)
 
 Also you can discover websites according to a dork from Google. (option 4)
@@ -155,12 +155,12 @@ def shodan():
          .   \    Shodan.io    /               ~^-|--'
               ^.             .^            .      |       +.
                 "-.._____.,-" .                    .
-         +           .                .   +                       
+         +           .                .   +
 
 
-    Shodan module will you to extract pre-discovered machines via Shodan's API. 
+    Shodan module will you to extract pre-discovered machines via Shodan's API.
 
-    In 'Automatic Query' section you can generate Shodan search query and find machines 
+    In 'Automatic Query' section you can generate Shodan search query and find machines
     by providing country code and service type.
 
     In 'Custom Query' section you need to enter your Shodan search query by yourself.
@@ -191,7 +191,7 @@ def shodan_auto_query():
         shodan()
 
     print """
-    Enter Protocol 
+    Enter Protocol
 
     (Examples:ssh, ftp, telnet, smb, rdp, mysql):
     """
@@ -241,12 +241,12 @@ def censys():
          .   \    Censys.io    /               ~^-|--'
               ^.             .^            .      |       +.
                 "-.._____.,-" .                    .
-         +           .                .   +              
+         +           .                .   +
 
 
-    Censys module will you to extract pre-discovered machines via Censys's API. 
+    Censys module will you to extract pre-discovered machines via Censys's API.
 
-    In 'Automatic Query' section you can generate Censys search query and find machines 
+    In 'Automatic Query' section you can generate Censys search query and find machines
     by providing country code and service type.
 
     In 'Custom Query' section you need to enter your Censys search query by yourself.
@@ -278,7 +278,7 @@ def censys_auto_query():
         censys_auto_query()
 
     print """
-        Enter Protocol 
+        Enter Protocol
 
         (Examples:ssh, ftp, telnet):
         """
@@ -335,7 +335,7 @@ def masscan():
     """
     ip_range = raw_input(">>")
     print """
-    Enter Protocol 
+    Enter Protocol
 
     (Examples:ssh, ftp, telnet, smb, rdp, mysql):
     """
@@ -352,12 +352,12 @@ def webscan():
     print """
 
                                  \_______/
-                             `.,-'\_____/`-.,'      
-                              /`..'\ _ /`.,'\     
-                             /  /`.,' `.,'\  \     
-                      WEB   /__/__/     \__\__\__  SCANNER 
+                             `.,-'\_____/`-.,'
+                              /`..'\ _ /`.,'\
+                             /  /`.,' `.,'\  \
+                      WEB   /__/__/     \__\__\__  SCANNER
                             \  \  \     /  /  /
-                             \  \,'`._,'`./  /   
+                             \  \,'`._,'`./  /
                               \,'`./___\,'`./
                              ,'`-./_____\,-'`.
                                  /       \
@@ -466,7 +466,7 @@ def menu2():
     In 'Web(SQL Injection)' section you can search for SQL Injection
     vulnerabilities on pre-discovered URLs
 
-    In 'Custom Exploit' section you can run a custom exploit for 
+    In 'Custom Exploit' section you can run a custom exploit for
     pre-discovered targets.
 
     In 'Run remote command' section you can execute commands remotely
@@ -492,21 +492,24 @@ def bruteforce():
                    -/o\_\  the one that remains, however unlikely,
                  __\_-./   is the right answer." - Sherlock Holmes
                 / / V \`U-.
-    ())        /, > o <    \  
-    <\.,.-._.-" [-\ o /__..-'  
+    ())        /, > o <    \
+    <\.,.-._.-" [-\ o /__..-'
     |/_  ) ) _.-"| \o/  |  \ o!0
-       `'-'-" 
+       `'-'-"
 
 
-    In this section you can make brute force attacks for following
+    In this section you can make brute force attacks for the following
     protocols: ftp, ssh, telnet, rdp, mysql
 
-    You can specifiy your targets by providing discovery id (option 1)
+    You can specify your targets by providing a discovery id (option 1)
 
-    Or you can brute force all discovered targets by providing a protocol (option 2)
+    You can brute force all discovered targets by providing a protocol (option 2)
+
+    Or you can enter an IP address, Port, and Protocol to brute force (option 3)
 
     1)Attack by Discovery id
     2)Attack all discovered machines by Protocol
+    3)Attack specific IP, Port, and Protocol
 
     9. Back
     0. Quit
@@ -557,13 +560,50 @@ def bruteforce_all_menu():
         exec_menu(index, menu4_actions)
 
 
+def bruteforce_specific():
+    print """
+    IP Address:
+    """
+    ip_address = raw_input(">>")
+
+    print """
+    Port Number:
+    """
+    port = raw_input(">>")
+
+    print """
+    Select Protocol:
+
+    1. ftp
+    2. ssh
+    3. telnet
+    4. rdp
+    5. mysql
+
+    9. back
+    0. exit
+
+    """
+    index = raw_input(">>")
+    try:
+        protocol = bruteforce_all_protocols[index]
+        res = brute_force_specific(ip_address, port, protocol)
+        if res:
+            time.sleep(5)
+            main_menu()
+        else:
+            bruteforce()
+    except KeyError:
+        exec_menu(index, menu4_actions)
+
+
 def sqli_menu():
     print """
                   Anatomy of Miroslav Stampar
 
              ___           _,.---,---.,_
             |         ,;~'             '~;,  --- In-band
-            |       ,;                     ;,      
+            |       ,;                     ;,
    First    |      ;                         ; ,--- Error Based
    Order    |     ,'                         /'
             |    ,;                        /' ;, --- Out-of-band
@@ -573,9 +613,9 @@ def sqli_menu():
            |     |  ~  ,-~~~^~, | ,~^~~~-,  ~  |
  Second    |      |   |        }:{        | <------ Boolean Based Blind
   Order    |      |   l       / | \       !   |
-           |      .~  (__,.--" .^. "--.,__)  ~. 
+           |      .~  (__,.--" .^. "--.,__)  ~.
            |      |    ----;' / | \ `;-<--------- Union Based
-           |__     \__.       \/^\/       .__/  
+           |__     \__.       \/^\/       .__/
 
 
         In this section you can search for SQL Injection
@@ -637,7 +677,7 @@ def custom_exploit():
                         `/                         \  /
                         { (+) <Custom Exploits> (+) }'
                          \_________________________/
-    
+
     In "Custom Exploit" section, you can exploit pre-discovered targets.
     Firstly, you need to specifiy your targets by providing a discovery id.
     After then, you need to choose an exploit. Available exploits will be listed
@@ -672,7 +712,7 @@ def custom_exploit():
 def run_command():
     print """
 
-                ,----------------,                ,---------, 
+                ,----------------,                ,---------,
             ,--------------------------,        ,"        ," |
           ,"                       ,"  |       ,"        ,"  |
          +------------------------+ |  |     ,"        ,"    |
@@ -683,12 +723,12 @@ def run_command():
          |  |./dos.pl utkusen.com|  |  |     |==== ooo |      ;
          |  |                    |  |  |     |(((( [33]|    ,"
          |  `--------------------'  |,"      | |((((   |  ,"
-         +-----------------------+  ;;       | |       |,"     
+         +-----------------------+  ;;       | |       |,"
             /_)______________(_/  //'       +.---------+
-       ___________________________/___  
-      /  oooooooooooooooo  .o.  oooo /,   
-     / ==ooooooooooooooo==.o.  ooo= //   
-    /_==__==========__==_ooo__ooo=_/'   
+       ___________________________/___
+      /  oooooooooooooooo  .o.  oooo /,
+     / ==ooooooooooooooo==.o.  ooo= //
+    /_==__==========__==_ooo__ooo=_/'
     `-----------------------------'
 
     In 'Run remote command' section you can execute commands remotely
@@ -745,10 +785,10 @@ def menu3():
          _.-'-' `-'-'|  |`-._/   /    | _ /    .    |
     __.-'            |  |   .   / |_.  | -|_/|/ `--.|_
  --'                  |  | |   /    |  |              `-
-                       |uU |UU/     |  /   
-                                    _       
-                                   | |      
-                  __ _ ___ ___  ___| |_ ___ 
+                       |uU |UU/     |  /
+                                    _
+                                   | |
+                  __ _ ___ ___  ___| |_ ___
                  / _` / __/ __|/ _ | __/ __|
                 | (_| |__ |__ |  __/ |_|__ |
                  |__,_|___/___/|___||__|___/
@@ -853,24 +893,24 @@ def menu4():
     print """
 
 
-                                                 .------.------.    
-  +-------------+                     ___        |      |      |    
-  |             |                     \ /]       |      |      |    
-  | Config Room |        _           _(_)        |      |      |    
-  |             |     ___))         [  | \___    |      |      |    
-  |             |     ) //o          | |     \   |      |      |    
-  |             |  _ (_    >         | |      ]  |      |      |    
-  |          __ | (O)  \__<          | | ____/   '------'------'    
-  |         /  o| [/] /   \)        [__|/_                          
-  |             | [\]|  ( \         __/___\_____                    
-  |             | [/]|   \ \__  ___|            |                   
-  |             | [\]|    \___E/  /|____________|_____              
-  |             | [/]|=====__   (_____________________)             
-  |             | [\] \_____ \    |                  |              
-  |             | [/========\ |   |                  |              
-  |             | [\]     []| |   |                  |              
-  |             | [/]     []| |_  |                  |              
-  |             | [\]     []|___) |                  |             
+                                                 .------.------.
+  +-------------+                     ___        |      |      |
+  |             |                     \ /]       |      |      |
+  | Config Room |        _           _(_)        |      |      |
+  |             |     ___))         [  | \___    |      |      |
+  |             |     ) //o          | |     \   |      |      |
+  |             |  _ (_    >         | |      ]  |      |      |
+  |          __ | (O)  \__<          | | ____/   '------'------'
+  |         /  o| [/] /   \)        [__|/_
+  |             | [\]|  ( \         __/___\_____
+  |             | [/]|   \ \__  ___|            |
+  |             | [\]|    \___E/  /|____________|_____
+  |             | [/]|=====__   (_____________________)
+  |             | [\] \_____ \    |                  |
+  |             | [/========\ |   |                  |
+  |             | [\]     []| |   |                  |
+  |             | [/]     []| |_  |                  |
+  |             | [\]     []|___) |                  |
 ====================================================================
 
     In this section you can change your API keys for Google, Shodan or Censys.
@@ -881,7 +921,7 @@ def menu4():
     4. Censys Secret
     5. Shodan API Key
     6. Show Config File
-    
+
     9. Back
     0. Quit
     """
@@ -904,7 +944,7 @@ def menu4():
     if selected == '9':
         menu4()
     else:
-        exit()    
+        exit()
     return
 
 
@@ -1001,6 +1041,7 @@ menu2_actions = {
 attack_actions = {
     '1': bruteforce_by_discovery_id,
     '2': bruteforce_all_menu,
+    '3': bruteforce_specific,
 
     '9': back,
     '0': exit,

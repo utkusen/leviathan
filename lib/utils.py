@@ -77,7 +77,7 @@ def get_command(protocol, port, user_fullpath, pass_fullpath, ip):
         'telnet': ['ncrack', '-p', port, '-U', user_fullpath, '-P', pass_fullpath, '--pairwise', ip,
                    '-T5']
     }.get(protocol,
-          ['ncrack', '-p', port, '-U', user_fullpath, '-P', pass_fullpath, ip, '-T5']
+          ['ncrack', '-p', '%s:%s' % (protocol, port), '-U', user_fullpath, '-P', pass_fullpath, ip, '-T5']
           )
 
 
@@ -147,7 +147,7 @@ def discovery_parse(discovery_id):
         return []
     except IOError:
         print "There is no such file: %s" % output_file
-        return 0     
+        return 0
 
 
 def get_file_by_dicovery_id(discovery_id, type):
@@ -171,7 +171,7 @@ def compromise_save(discovery_id, exploit_name, asset_list):
                 compromised.write("\n")
     except IOError:
         print "There is no such file: %s" % output_file
-        return 0             
+        return 0
 
 
 def return_asset(protocol, type):
@@ -191,14 +191,14 @@ def return_asset(protocol, type):
 
 def show_config_file():
     print """
-    
+
         GOOGLE_API_KEY = %s
         GOOGLE_CSE_ID = %s
         CENSYS_API_URL = %s
         CENSYS_UID = %s
         CENSYS_SECRET = %s
         SHODAN_API_KEY = %s
-        
+
     """ % (GOOGLE_API_KEY, GOOGLE_CSE_ID, CENSYS_API_URL, CENSYS_UID, CENSYS_SECRET, SHODAN_API_KEY)
     return
 
@@ -229,6 +229,4 @@ def file_len(fname):
                 pass
         return i + 1
     except:
-        return 0    
-
- 
+        return 0
