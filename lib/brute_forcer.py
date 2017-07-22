@@ -38,18 +38,41 @@ def brute_force(discovery_id):
                 except KeyboardInterrupt:
                     break
                 except:
-                    print "Operation Timeout"    
+                    print "Operation Timeout"
             else:
                 return "Misformatted asset file %s.txt" % discovery_id
 
             print ""
             print "Finished"
+
+
+def brute_force_specific(ip_address, port_number, protocol):
+    cracked_list = []
+
+    port, user_list, pass_list = get_protocol_info(protocol)
+
+    if port_number and user_list and pass_list:
+        user_fullpath = os.path.join(BASE_DIR, 'config', 'wordlists', user_list)
+        pass_fullpath = os.path.join(BASE_DIR, 'config', 'wordlists', pass_list)
+        ip_fullpath = None
+
+        try:
+            brute_force_by_ip(ip_address, user_fullpath, pass_fullpath, ip_fullpath, protocol, port_number)
+        except KeyboardInterrupt:
+            return
+        except:
+            print "Operation Timeout"
+
+        print ""
+        print "Finished"
+
+
 @timeout(50)
 def brute_force_by_ip(ipaddress, user_fullpath, pass_fullpath, ip_fullpath, protocol, port):
     ipaddress = ipaddress.strip("\n")
     print "\nTrying: " +ipaddress
     cmd = get_command(protocol, port, user_fullpath, pass_fullpath, ipaddress)
-    output = check_output(cmd)  
+    output = check_output(cmd)
     output_list = output.split('\n')
     for line in output_list:
         clean_line = line.rstrip()
