@@ -520,6 +520,43 @@ def bruteforce():
     return
 
 
+def bruteforce_specific():
+    print """
+    IP Address:
+    """
+    ip_address = raw_input(">>")
+
+    print """
+    Port Number:
+    """
+    port = raw_input(">>")
+
+    print """
+    Select Protocol:
+
+    1. ftp
+    2. ssh
+    3. telnet
+    4. rdp
+    5. mysql
+
+    9. back
+    0. exit
+
+    """
+    index = raw_input(">>")
+    try:
+        protocol = bruteforce_all_protocols[index]
+        res = brute_force_specific(ip_address, port, protocol)
+        if res:
+            time.sleep(5)
+            main_menu()
+        else:
+            bruteforce()
+    except KeyError:
+        exec_menu(index, menu4_actions)
+
+
 def bruteforce_by_discovery_id():
     print """
     Discovery ID:
