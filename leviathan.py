@@ -20,7 +20,7 @@ import glob
 from lib.protocol_scanner import shodan_search, censys_search, mass_scan
 from lib.utils import query_constructor, automatic_dork, show_config_file, \
     config_change, get_file_by_dicovery_id, return_asset
-from lib.brute_forcer import brute_force, bruteforce_all
+from lib.brute_forcer import brute_force, bruteforce_all, brute_force_specific
 from lib.sqli_scanner import sqli_scan, sqli_scan_all, link_extract
 from lib.send_command import send_command_ssh, send_to_all_ssh
 from leviathan_config import COUNTRY_CODES, BASE_DIR
@@ -503,10 +503,13 @@ def bruteforce():
 
     You can specifiy your targets by providing discovery id (option 1)
 
-    Or you can brute force all discovered targets by providing a protocol (option 2)
+    You can brute force all discovered targets by providing a protocol (option 2)
+
+    Or you can enter an IP address, Port, and Protocol to brute force (option 3)
 
     1)Attack by Discovery id
     2)Attack all discovered machines by Protocol
+    3)Attack specific IP, Port, and Protocol
 
     9. Back
     0. Quit
@@ -515,6 +518,43 @@ def bruteforce():
     attack_type = raw_input(">>")
     exec_menu(attack_type, attack_actions)
     return
+
+
+def bruteforce_specific():
+    print """
+    IP Address:
+    """
+    ip_address = raw_input(">>")
+
+    print """
+    Port Number:
+    """
+    port = raw_input(">>")
+
+    print """
+    Select Protocol:
+
+    1. ftp
+    2. ssh
+    3. telnet
+    4. rdp
+    5. mysql
+
+    9. back
+    0. exit
+
+    """
+    index = raw_input(">>")
+    try:
+        protocol = bruteforce_all_protocols[index]
+        res = brute_force_specific(ip_address, port, protocol)
+        if res:
+            time.sleep(5)
+            main_menu()
+        else:
+            bruteforce()
+    except KeyError:
+        exec_menu(index, menu4_actions)
 
 
 def bruteforce_by_discovery_id():
@@ -1001,6 +1041,7 @@ menu2_actions = {
 attack_actions = {
     '1': bruteforce_by_discovery_id,
     '2': bruteforce_all_menu,
+    '3': bruteforce_specific,
 
     '9': back,
     '0': exit,
