@@ -118,9 +118,6 @@ You can get basic usage information inside the menus. For detailed usage manual,
 ## Authors
 This project is written by Utku Sen and Ozge Barbaros
 
-## Donation
-Our bitcoin address: 13m5tKkY2TUVskkaCbLEqU1VN8daAUvJS8
-
 # Legal Warning
 
 While this may be helpful for some, there are significant risks.
